@@ -38,7 +38,7 @@ class ChristmasHatPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-// 2. Christmas Hat Widget
+
 class ChristmasHat extends StatelessWidget {
   final double size;
   const ChristmasHat({super.key, this.size = 48.0});
@@ -46,7 +46,7 @@ class ChristmasHat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
-      angle: 6 * (3.1415926535 / 180), // 6 degrees rotation
+      angle: 6 * (3.1415926535 / 180), 
       child: SizedBox(
         width: size,
         height: size,

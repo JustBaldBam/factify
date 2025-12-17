@@ -1,25 +1,26 @@
+// lib/screens/fact_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:newssports/models/category.dart';
-import 'package:newssports/models/mock_data.dart';
+import 'package:newssports/models/data.dart';
 import '../widgets/fact_card.dart';
 
 class FactListScreen extends StatelessWidget {
   final String categoryId;
   final VoidCallback onBackToCategories;
+  final Function(String fact, String categoryId) onSaveFact; 
 
   const FactListScreen({
     super.key,
     required this.categoryId,
     required this.onBackToCategories,
+    required this.onSaveFact,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Find the category object
     final Category? category = Category.findById(categoryId, categories);
     final List<FactItem> facts = factDataStore[categoryId] ?? [];
 
-    // Safety check
     if (category == null || facts.isEmpty) {
       return Scaffold(
         appBar: AppBar(
@@ -44,22 +45,19 @@ class FactListScreen extends StatelessWidget {
       );
     }
 
-    // Colors for the AppBar gradient
     final Color baseColor = category.color;
     final Color darker = Color.alphaBlend(Colors.black.withOpacity(0.3), baseColor);
     final Color lighter = Color.alphaBlend(Colors.white.withOpacity(0.3), baseColor);
 
-
     return CustomScrollView(
       slivers: [
-        // AppBar with Collapsing Header and Gradient Background
         SliverAppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: onBackToCategories,
           ),
-          expandedHeight: 200.0, // Height of the header
-          pinned: true, // App bar remains visible
+          expandedHeight: 200.0,
+          pinned: true,
           surfaceTintColor: baseColor,
           flexibleSpace: FlexibleSpaceBar(
             titlePadding: const EdgeInsets.only(bottom: 16),
@@ -91,7 +89,6 @@ class FactListScreen extends StatelessWidget {
           ),
         ),
 
-        // Facts List
         SliverPadding(
           padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
           sliver: SliverList(
@@ -103,6 +100,8 @@ class FactListScreen extends StatelessWidget {
                   child: FactCard(
                     factItem: factItem,
                     categoryColor: baseColor,
+                    categoryId: categoryId,
+                    onSaveFact: onSaveFact,
                   ),
                 );
               },

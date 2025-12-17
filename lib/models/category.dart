@@ -1,4 +1,4 @@
-// lib/models/category.dart
+
 import 'package:flutter/material.dart';
 
 class FactItem {
@@ -26,7 +26,7 @@ class Category {
     required this.color,
   });
 
-  // Find category by ID from the global list
+  
   static Category? findById(String id, List<Category> categories) {
     try {
       return categories.firstWhere((cat) => cat.id == id);
