@@ -2,10 +2,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math' as math;
-import '../models/data.dart';
 import '../widgets/christmas_hat.dart';
 import '../widgets/category_card.dart';
-import '../models/category.dart';
+import 'package:newssports/models/models.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(String? categoryId) onCategorySelect;

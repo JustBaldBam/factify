@@ -43,7 +43,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   AppTab _activeTab = AppTab.home;
   String? _currentCategoryId;
-  List<Map<String, dynamic>> _savedFacts = [];
+  final List<Map<String, dynamic>> _savedFacts = [];
 
   void _setTab(AppTab tab) {
     setState(() {

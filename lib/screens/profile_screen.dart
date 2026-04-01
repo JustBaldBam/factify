@@ -174,7 +174,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Curious mind • Knowledge seeker",
+                      "Curious mind - Knowledge seeker",
                       style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                     ),
                     const SizedBox(height: 24),
@@ -252,9 +252,9 @@ class ProfileScreen extends StatelessWidget {
                           const SizedBox(height: 12),
                           Text(
                             "Born in a tiny attic during a snowy winter night, Factify started as a simple notebook of random trivia scribbled by a curious soul who couldn't sleep. "
-                            "One fact led to another, and soon the notebook became an app — built to spark that same 'whoa' moment in everyone. "
+                            "One fact led to another, and soon the notebook became an app - built to spark that same 'whoa' moment in everyone. "
                             "From late-night coding sessions fueled by coffee and wonder, it grew into this cozy collection of knowledge gems. "
-                            "Now it's yours to explore. Keep the curiosity alive. ✨",
+                            "Now it's yours to explore. Keep the curiosity alive.",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,

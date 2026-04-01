@@ -1,18 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-class FactItem {
-  final String fact;
-  final String imageUrl;
-  final String imageAlt;
-
-  FactItem({
-    required this.fact,
-    this.imageUrl = "",
-    this.imageAlt = "",
-  });
-}
-
 class Category {
   final String id;
   final String name;

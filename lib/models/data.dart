@@ -2,6 +2,18 @@
 import 'package:flutter/material.dart';
 import 'category.dart';
 
+class FactItem {
+  final String fact;
+  final String imageAlt;
+  final String imageUrl;
+
+  FactItem({
+    required this.fact,
+    required this.imageAlt,
+    required this.imageUrl,
+  });
+}
+
 enum AppTab { home, search, saved, profile }
 
 const List<String> dailyFacts = [

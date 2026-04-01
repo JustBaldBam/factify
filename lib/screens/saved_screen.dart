@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:newssports/models/category.dart';
 import 'package:newssports/models/data.dart';
+import 'package:newssports/models/models.dart';
 
 class SavedScreen extends StatefulWidget {
   final List<Map<String, dynamic>> savedFacts;

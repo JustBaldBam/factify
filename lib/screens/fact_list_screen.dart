@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:newssports/models/category.dart';
 import 'package:newssports/models/data.dart';
 import '../widgets/fact_card.dart';
+import 'detail_screen.dart';
+import 'package:newssports/models/models.dart';
 
 class FactListScreen extends StatelessWidget {
   final String categoryId;
@@ -97,11 +99,27 @@ class FactListScreen extends StatelessWidget {
                 final factItem = facts[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),
-                  child: FactCard(
-                    factItem: factItem,
-                    categoryColor: baseColor,
-                    categoryId: categoryId,
-                    onSaveFact: onSaveFact,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DetailScreen(
+                            factItem: factItem,
+                            categoryColor: baseColor,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Hero(
+                      tag: 'fact-image-${factItem.fact}',
+                      child: FactCard(
+                        factItem: factItem,
+                        categoryColor: baseColor,
+                        categoryId: categoryId,
+                        onSaveFact: onSaveFact,
+                      ),
+                    ),
                   ),
                 );
               },

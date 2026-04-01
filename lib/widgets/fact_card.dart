@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import '../models/category.dart';
+import '../models/models.dart';
 
 class FactCard extends StatelessWidget {
   final FactItem factItem;
@@ -105,7 +105,7 @@ class FactCard extends StatelessWidget {
                       onSaveFact(factItem.fact, categoryId);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text('Fact saved successfully! 🎉'),
+                          content: const Text('Fact saved successfully!'),
                           backgroundColor: Colors.indigo.shade600,
                           behavior: SnackBarBehavior.floating,
                           duration: const Duration(seconds: 2),
