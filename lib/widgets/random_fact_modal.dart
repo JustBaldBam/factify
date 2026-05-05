@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:newssports/models/data.dart';
 
 class RandomFactModal extends StatelessWidget {
-  final Map<String, dynamic> fact;
+  final RandomFactData fact;
   final VoidCallback onClose;
 
   const RandomFactModal({super.key, required this.fact, required this.onClose});
@@ -29,7 +30,7 @@ class RandomFactModal extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF1F2937)),
             ),
             Text(
-              '${fact['categoryId']} Category'.toUpperCase(),
+              '${fact.categoryId} Category'.toUpperCase(),
               style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
             ),
             const SizedBox(height: 16),
@@ -41,7 +42,7 @@ class RandomFactModal extends StatelessWidget {
                 border: Border.all(color: Colors.indigo.shade100),
               ),
               child: Text(
-                fact['fact'],
+                fact.fact,
                 style: TextStyle(fontSize: 16, color: Colors.grey.shade700, height: 1.5),
                 textAlign: TextAlign.center,
               ),

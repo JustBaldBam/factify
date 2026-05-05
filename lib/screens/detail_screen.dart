@@ -11,8 +11,16 @@ class DetailScreen extends StatelessWidget {
     required this.categoryColor,
   });
 
+  String _placeholderImage(String label) {
+    return 'https://placehold.co/1200x400/F3F4F6/1F2937?text=${label.replaceAll(' ', '+')}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final imageUrls = factItem.imageUrls.isNotEmpty
+        ? factItem.imageUrls
+        : [_placeholderImage(factItem.imageAlt)];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Fact Details"),
@@ -22,14 +30,58 @@ class DetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              factItem.imageUrl,
-              width: double.infinity,
+            SizedBox(
               height: 250,
-              fit: BoxFit.cover,
+              child: PageView.builder(
+                itemCount: imageUrls.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      index == 0 ? 0 : 8,
+                      0,
+                      index == imageUrls.length - 1 ? 0 : 8,
+                      0,
+                    ),
+                    child: Image.network(
+                      imageUrls[index],
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: categoryColor.withOpacity(0.15),
+                          alignment: Alignment.center,
+                          child: Text(
+                            factItem.imageAlt,
+                            style: TextStyle(
+                              color: categoryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
 
             const SizedBox(height: 16),
+
+            if (imageUrls.length > 1)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '${imageUrls.length} images',
+                  style: TextStyle(
+                    color: categoryColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
+            if (imageUrls.length > 1) const SizedBox(height: 12),
 
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),

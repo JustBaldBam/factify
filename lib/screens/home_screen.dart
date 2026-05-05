@@ -7,11 +7,15 @@ import '../widgets/category_card.dart';
 import 'package:newssports/models/models.dart';
 
 class HomeScreen extends StatefulWidget {
+  final List<Category> categories;
+  final List<String> dailyFacts;
   final Function(String? categoryId) onCategorySelect;
   final VoidCallback onRandomFactClick;
 
   const HomeScreen({
     super.key,
+    required this.categories,
+    required this.dailyFacts,
     required this.onCategorySelect,
     required this.onRandomFactClick,
   });
@@ -29,9 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
-      if (mounted) {
+      if (mounted && widget.dailyFacts.isNotEmpty) {
         setState(() {
-          currentFactIndex = (currentFactIndex + 1) % dailyFacts.length;
+          currentFactIndex = (currentFactIndex + 1) % widget.dailyFacts.length;
         });
       }
     });
@@ -45,6 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDailyFactCarousel() {
+    if (widget.dailyFacts.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.95),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.indigo.shade100),
+        ),
+        child: const Text('No facts available yet.'),
+      );
+    }
+
     return AnimatedOpacity(
       opacity: 1.0,
       duration: const Duration(milliseconds: 800),
@@ -75,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               child: Text(
-                dailyFacts[currentFactIndex],
+                widget.dailyFacts[currentFactIndex],
                 style: TextStyle(fontSize: 17, color: Colors.grey.shade800, height: 1.6),
               ),
             ),
@@ -83,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(dailyFacts.length, (index) {
+            children: List.generate(widget.dailyFacts.length, (index) {
               return GestureDetector(
                 onTap: () => setState(() => currentFactIndex = index),
                 child: AnimatedContainer(
@@ -104,19 +121,34 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Category? _categoryById(String id) {
+    return Category.findById(id, widget.categories);
+  }
+
   
-  Widget _buildChristmasBanner() {
+  Widget _buildFeatureBanner({
+    required Category category,
+    required String eyebrow,
+    required String title,
+    required String ctaLabel,
+    required List<Color> colors,
+    Widget? accent,
+  }) {
     return InkWell(
-      onTap: () => widget.onCategorySelect('christmas'),
+      onTap: () => widget.onCategorySelect(category.id),
       borderRadius: BorderRadius.circular(20),
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: const Color(0xFFDC2626),
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.red.shade900.withOpacity(0.4),
+              color: colors.first.withOpacity(0.4),
               blurRadius: 20,
               offset: const Offset(0, 8),
             ),
@@ -125,91 +157,36 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
-            const Positioned(
-              top: -40,
-              right: -10,
-              child: ChristmasHat(size: 80),
-            ),
+            if (accent != null)
+              Positioned(
+                top: -40,
+                right: -10,
+                child: accent,
+              ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Seasonal Magic',
+                  eyebrow,
                   style: TextStyle(fontSize: 14, color: Colors.white70, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Christmas Wonders',
+                  title,
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 const SizedBox(height: 12),
                 ElevatedButton(
-                  onPressed: () => widget.onCategorySelect('christmas'),
+                  onPressed: () => widget.onCategorySelect(category.id),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: Colors.red.shade800,
+                    foregroundColor: category.color,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   ),
-                  child: const Text('Dive In', style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: Text(ctaLabel, style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCosmicBanner() {
-    return InkWell(
-      onTap: () => widget.onCategorySelect('space'),
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.purple.shade900, Colors.indigo.shade900],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.purple.shade900.withOpacity(0.4),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Monthly Spotlight',
-              style: TextStyle(fontSize: 14, color: Colors.white70, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Icons.rocket_launch, color: Colors.white, size: 32),
-                const SizedBox(width: 12),
-                Text(
-                  'Cosmic Wonders',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: () => widget.onCategorySelect('space'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber.shade600,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              ),
-              child: const Text('Explore Space', style: TextStyle(fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -219,6 +196,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final featuredCategory = _categoryById('christmas') ??
+        (widget.categories.isNotEmpty ? widget.categories.first : null);
+    final spotlightCategory = _categoryById('space') ??
+        (widget.categories.length > 1 ? widget.categories[1] : featuredCategory);
+    final previewCategories = widget.categories.take(3).toList();
+
     return Stack(
       children: [
  
@@ -281,9 +264,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Color(0xFF1F2937)),
               ),
               const SizedBox(height: 16),
-              _buildChristmasBanner(),
-              const SizedBox(height: 20),
-              _buildCosmicBanner(),
+              if (featuredCategory != null) ...[
+                _buildFeatureBanner(
+                  category: featuredCategory,
+                  eyebrow: 'Featured Category',
+                  title: featuredCategory.name,
+                  ctaLabel: 'Dive In',
+                  colors: [const Color(0xFFDC2626), Colors.red.shade700],
+                  accent: const ChristmasHat(size: 80),
+                ),
+                const SizedBox(height: 20),
+              ],
+              if (spotlightCategory != null && spotlightCategory.id != featuredCategory?.id)
+                _buildFeatureBanner(
+                  category: spotlightCategory,
+                  eyebrow: 'Monthly Spotlight',
+                  title: spotlightCategory.name,
+                  ctaLabel: 'Explore Now',
+                  colors: [Colors.purple.shade900, Colors.indigo.shade900],
+                ),
               const SizedBox(height: 32),
 
               const Text(
@@ -300,12 +299,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisSpacing: 16,
                   childAspectRatio: 0.9,
                 ),
-                itemCount: 4,
+                itemCount: previewCategories.length + 1,
                 itemBuilder: (context, index) {
-                  if (index < 3) {
+                  if (index < previewCategories.length) {
+                    final category = previewCategories[index];
                     return CategoryCard(
-                      category: categories[index],
-                      onSelect: () => widget.onCategorySelect(categories[index].id),
+                      category: category,
+                      onSelect: () => widget.onCategorySelect(category.id),
                     );
                   }
                   return CategoryCard(

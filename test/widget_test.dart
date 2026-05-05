@@ -8,6 +8,7 @@ void main() {
 
     expect(find.text('Home'), findsOneWidget);
     expect(find.text('Search'), findsOneWidget);
+    expect(find.text('AI'), findsOneWidget);
     expect(find.text('Saved'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
   });

@@ -1,19 +1,21 @@
 // lib/screens/fact_list_screen.dart
 import 'package:flutter/material.dart';
-import 'package:newssports/models/category.dart';
-import 'package:newssports/models/data.dart';
 import '../widgets/fact_card.dart';
 import 'detail_screen.dart';
 import 'package:newssports/models/models.dart';
 
 class FactListScreen extends StatelessWidget {
   final String categoryId;
+  final List<Category> categories;
+  final Map<String, List<FactItem>> factDataStore;
   final VoidCallback onBackToCategories;
   final Function(String fact, String categoryId) onSaveFact; 
 
   const FactListScreen({
     super.key,
     required this.categoryId,
+    required this.categories,
+    required this.factDataStore,
     required this.onBackToCategories,
     required this.onSaveFact,
   });

@@ -1,18 +1,20 @@
 
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:newssports/models/category.dart';
-import 'package:newssports/models/data.dart';
 import 'package:newssports/models/models.dart';
 
 class SavedScreen extends StatefulWidget {
   final List<Map<String, dynamic>> savedFacts;
+  final List<Category> categories;
+  final Map<String, List<FactItem>> factDataStore;
   final Function(String? categoryId) onCategorySelect;
   final Function(int index) onRemoveFact;
 
   const SavedScreen({
     super.key,
     required this.savedFacts,
+    required this.categories,
+    required this.factDataStore,
     required this.onCategorySelect,
     required this.onRemoveFact,
   });
@@ -73,11 +75,11 @@ class _SavedScreenState extends State<SavedScreen> {
   }
 
   Category? _getCategory(String categoryId) {
-    return Category.findById(categoryId, categories);
+    return Category.findById(categoryId, widget.categories);
   }
 
   FactItem? _getOriginalFactItem(String factText, String categoryId) {
-    final List<FactItem> categoryFacts = factDataStore[categoryId] ?? [];
+    final List<FactItem> categoryFacts = widget.factDataStore[categoryId] ?? [];
     try {
       return categoryFacts.firstWhere((item) => item.fact == factText);
     } catch (e) {
